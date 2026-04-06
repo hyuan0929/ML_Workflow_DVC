@@ -1,0 +1,40 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: 048f9f0cf19cb063cd61d4adbb88ac7f
+      size: 1221
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: ceaf974fa3e59534e76b0c7860994463.dir
+      size: 220083362
+      nfiles: 2
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: ceaf974fa3e59534e76b0c7860994463.dir
+      size: 220083362
+      nfiles: 2
+    - path: src/train.py
+      hash: md5
+      md5: 808f62da7f7ff29326ab8e5dbbe2e0dd
+      size: 2049
+    params:
+      params.yaml:
+        epochs: 5
+        lr: 0.0
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 9356556ba2f5669e3ceed63f8deee1f4
+      size: 28
+    - path: model.pt
+      hash: md5
+      md5: 135e0f2013570eefa053fc7960326a63
+      size: 56713

@@ -1,10 +1,66 @@
-# DVC / ML
-data/
-*.pt
+# =========================
+# 📦 DVC / ML Artifacts
+# =========================
 
-# Python
+# DVC tracked data (should NOT be in Git)
+data/
+
+# Model files
+*.pt
+*.pth
+*.ckpt
+
+# Experiment outputs
+metrics.json
+predictions.json
+
+# =========================
+# 🐍 Python
+# =========================
+
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
 
-# System
+# Virtual environments
+venv/
+.env/
+.envrc
+
+# =========================
+# 🧪 Jupyter / Notebook
+# =========================
+
+.ipynb_checkpoints/
+
+# =========================
+# 💻 System files
+# =========================
+
 .DS_Store
+Thumbs.db
+
+# =========================
+# 🔧 VS Code / IDE
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# 📦 Logs / Temp
+# =========================
+
+*.log
+*.tmp
+*.cache
+
+# =========================
+# 🚀 Optional (if used)
+# =========================
+
+# DVC cache (optional, normally auto-handled)
+.dvc/cache/

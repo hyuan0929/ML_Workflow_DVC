@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/prepare.py
       hash: md5
-      md5: 048f9f0cf19cb063cd61d4adbb88ac7f
-      size: 1221
+      md5: bf4b8867f411ff0bd38bf0046b1423ca
+      size: 1030
     outs:
     - path: data/processed
       hash: md5
@@ -23,38 +23,44 @@ stages:
       nfiles: 2
     - path: src/train.py
       hash: md5
-      md5: 808f62da7f7ff29326ab8e5dbbe2e0dd
-      size: 2049
+      md5: be73c952a70629d955958125a4a30e57
+      size: 5567
     params:
       params.yaml:
-        epochs: 5
+        activation: relu
+        batch_size: 64
+        epochs: 2
+        init: default
         lr: 0.001
+        momentum: 0.9
+        optimizer: sgd_momentum
     outs:
     - path: metrics.json
       hash: md5
-      md5: ada97714bac7f0b76f798745b09ac560
-      size: 28
+      md5: 5400d1ded78291819fa090cc18ec7459
+      size: 194
     - path: model.pt
       hash: md5
-      md5: be37cdb2f97d646c3d88f88ab9749f18
-      size: 56713
+      md5: f5833913852e0e165543b9dcddee85aa
+      size: 56777
   predict:
     cmd: python src/predict.py
     deps:
-    - path: data/processed/test.pt
+    - path: data/processed
       hash: md5
-      md5: 0c88d311c92414204c9425d74e447890
-      size: 31441677
+      md5: ceaf974fa3e59534e76b0c7860994463.dir
+      size: 220083362
+      nfiles: 2
     - path: model.pt
       hash: md5
-      md5: be59752c31f912d9140d4733ed91be61
-      size: 56713
+      md5: f5833913852e0e165543b9dcddee85aa
+      size: 56777
     - path: src/predict.py
       hash: md5
-      md5: b7baa3b4df9a30a2d7d4cbbb0e9f5691
-      size: 1112
+      md5: 6885977a8368dd6e2c3a3a2324a6672a
+      size: 1339
     outs:
     - path: predictions.json
       hash: md5
-      md5: 1cc5c8fa3518fd70490e2a8ebb2062e9
-      size: 923
+      md5: e440cf51a80914345e0663905236ae7e
+      size: 823

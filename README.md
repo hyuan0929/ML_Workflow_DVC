@@ -1,70 +1,180 @@
-# ML Workflow with DVC
+# ML Workflow with DVC (MNIST CNN Pipeline)
 
-## Workshop Summary
+## 📌 Project Overview
 
-This workshop introduces students to building a reproducible machine learning workflow using Data Version Control (DVC). The goal is to move beyond ad-hoc experimentation toward structured, traceable, and collaborative ML development practices.
+This project demonstrates a simple **Machine Learning pipeline** using **DVC (Data Version Control)**.
 
-Students begin by setting up a minimal project that combines Git and DVC. They learn how to separate code, data, and models while maintaining a unified workflow. The project uses a simple Convolutional Neural Network (CNN) trained on the MNIST dataset to keep the focus on workflow concepts rather than model complexity.
+The goal is to show how data preparation, model training, and prediction can be organized into a **reproducible and automated workflow**.
 
-The workflow is divided into pipeline stages: data preparation, model training, and prediction. Each stage is defined in `dvc.yaml`, allowing DVC to track dependencies and determine when stages need to be re-executed. Students run the pipeline using `dvc repro`, inspect results using `dvc metrics show`, and compare experiments using `dvc metrics diff`.
+We use the **MNIST dataset** and a simple **Convolutional Neural Network (CNN)** to illustrate this process.
 
-A key component of the workshop is experimentation through `params.yaml`. Students modify hyperparameters such as learning rate, epochs, and batch size, and observe how these changes propagate through the pipeline. This reinforces the idea that experiments should be controlled, reproducible, and comparable.
+---
 
-The workshop also introduces the concept of extending pipelines. Students add a prediction stage that reuses the trained model, demonstrating how ML workflows evolve from training to inference. This stage highlights the importance of modular code and reinforces best practices such as separating model definitions from execution logic.
+## ⚙️ Pipeline Structure
 
-Finally, students learn how to share their work using both Git and DVC. Git is used to version code and metadata, while DVC manages large artifacts such as datasets and models. By configuring a remote storage location and using `dvc push`, students understand how teams collaborate on ML projects without storing large files in Git repositories.
+The pipeline consists of three stages:
+prepare → train → predict
 
-## Learning Objectives
 
-By the end of this workshop, students will be able to:
+### 1. Prepare
+- Downloads the MNIST dataset
+- Converts data into PyTorch tensors
+- Saves processed data into `data/processed`
 
-- Explain the role of DVC in an MLOps workflow
-- Describe the limitations of Git for machine learning projects
-- Build and run a multi-stage DVC pipeline
-- Track datasets, models, and metrics using DVC
-- Modify experiment parameters and compare results
-- Understand dependency-aware pipeline execution
-- Extend a pipeline to include inference (prediction)
-- Apply best practices for modular ML code design
-- Differentiate between `git push` and `dvc push`
-- Reproduce a workflow on another machine using DVC
+### 2. Train
+- Loads processed data
+- Trains a CNN model
+- Saves:
+  - model (`model.pt`)
+  - evaluation metrics (`metrics.json`)
 
-## Project Structure
+### 3. Predict
+- Loads trained model and test data
+- Runs inference
+- Saves predictions (`predictions.json`)
 
-```
-project/
-├── data/
-├── src/
-│   ├── prepare.py
-│   ├── train.py
-│   ├── predict.py
-├── params.yaml
-├── dvc.yaml
-```
+---
 
-## Getting Started
+## 🔁 Role of DVC
 
-```bash
-pip install dvc torch torchvision scikit-learn pandas pyyaml
-git init
-dvc init
+DVC is used to:
+
+- Track **data and model artifacts**
+- Define pipeline stages in `dvc.yaml`
+- Automatically rerun only necessary stages
+- Ensure **reproducibility**
+
+Example command:
+dvc repro
+
+
+DVC detects changes in:
+- code
+- data
+- parameters
+
+and reruns only affected stages.
+
+---
+
+## 🧪 Experiments
+
+We conducted multiple experiments to analyze how different hyperparameters affect model performance.
+
+### 🔹 Activation Functions
+
+We tested:
+- ReLU
+- LeakyReLU
+- GELU
+
+| Experiment | Activation | Init | Epochs | LR | Batch Size | Accuracy |
+|----------|------------|------|--------|----|------------|----------|
+| 1 | ReLU | default | 2 | 0.001 | 64 | 0.9546 |
+| 2 | LeakyReLU | default | 2 | 0.001 | 64 | 0.9624 |
+| 3 | GELU | default | 2 | 0.001 | 64 | 0.9662 |
+
+**Observation:**  
+GELU achieved the highest accuracy, followed by LeakyReLU and ReLU. This suggests smoother activation functions can improve performance.
+
+---
+
+### 🔹 Optimizers
+
+We tested:
+- Adam
+- SGD
+- SGD with Momentum
+
+| Experiment | Optimizer | Momentum | Accuracy |
+|----------|----------|----------|----------|
+| 1 | Adam | 0.9 | 0.9567 |
+| 2 | SGD | 0.0 | 0.8440 |
+| 3 | SGD with Momentum | 0.9 | 0.9133 |
+
+**Observation:**  
+Adam converged faster and achieved better accuracy. SGD without momentum performed worst, while momentum improved stability and performance.
+
+---
+
+### 🔹 Forward and Backward Pass Inspection
+
+We instrumented the training process to observe:
+
+- Forward outputs (logits)
+- Loss values
+- Gradient norms
+- Parameter updates
+
+Example observations:
+
+- Batch loss: **2.2902**
+- Conv gradient norm: **0.060388**
+- FC gradient norm: **0.919531**
+
+**Insight:**  
+This confirms that:
+- forward pass generates predictions
+- loss measures error
+- backward pass computes gradients
+- optimizer updates parameters
+
+---
+
+## 🧠 Key Concepts Demonstrated
+
+- Machine Learning pipelines
+- Hyperparameter tuning
+- Optimizer behavior
+- Activation functions
+- Forward and backward passes
+- Reproducibility with DVC
+
+---
+
+## 🚀 ML Pipelines in CI/CD
+
+This project reflects how ML systems are used in **real-world CI/CD environments**:
+
+- Pipelines automate data → training → prediction
+- Version control ensures reproducibility
+- Experiments can be tracked and compared
+- Changes trigger only necessary recomputation
+
+This is essential for scalable and production-ready ML workflows.
+
+---
+
+## 🛠️ Technologies Used
+
+- Python
+- PyTorch
+- DVC
+- YAML
+- Git
+
+---
+
+## 👥 Team Members
+
+- Haibo Yuan  
+- Ce Chen  
+- Zhuoran Zhang  
+
+---
+
+## ▶️ How to Run
+
+From the project root:
+pip install -r requirements.txt
 dvc repro
 dvc metrics show
-```
 
-## Collaboration Workflow
 
-```bash
-dvc push
-git push
-```
+---
 
-To reproduce on another machine:
+## ✅ Conclusion
 
-```bash
-git clone <repo>
-cd <repo>
-pip install dvc torch torchvision scikit-learn pandas pyyaml
-dvc pull
-dvc repro
-```
+This project demonstrates how to build a structured and reproducible ML workflow using DVC.  
+
+By organizing the pipeline into stages and tracking dependencies, we can efficiently experiment, debug, and scale machine learning systems.

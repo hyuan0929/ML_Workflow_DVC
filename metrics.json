@@ -1,0 +1,10 @@
+{
+    "accuracy": 0.9102,
+    "activation": "relu",
+    "init": "default",
+    "optimizer": "sgd_momentum",
+    "momentum": 0.9,
+    "epochs": 2,
+    "lr": 0.001,
+    "batch_size": 64
+}

@@ -1,3 +1,10 @@
+.venv
+data
+.history
+.dvc
+.DS_Store
+__pycache__
+
 # =========================
 # 📦 DVC / ML Artifacts
 # =========================
